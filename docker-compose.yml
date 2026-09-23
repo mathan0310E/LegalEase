@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: legalease-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=LegalEase
+      - ENVIRONMENT=development
+      - PORT=8000
+      - DATABASE_URL=sqlite:///./legalease.db
+      - JWT_SECRET=supersecret-legalease-jwt-token-key-change-in-prod-2026
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=gemini-2.5-flash
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:80
+    volumes:
+      - ./backend/legalease.db:/app/legalease.db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: legalease-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
