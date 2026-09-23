@@ -7,22 +7,22 @@ class Settings(BaseSettings):
     APP_NAME: str = "LegalEase"
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
-    PORT: int = 8000
+    PORT: int = int(os.getenv("PORT", "8000"))
 
-    # Database
-    DATABASE_URL: str = "sqlite:///./legalease.db"
+    # Database - automatically uses DATABASE_URL from environment (Render sets this)
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./legalease.db")
 
     # Security & JWT
-    JWT_SECRET: str = "supersecret-legalease-jwt-token-key-change-in-prod-2026"
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "supersecret-legalease-jwt-token-key-change-in-prod-2026")
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
 
     # Gemini
-    GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
+    CORS_ORIGINS: str = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000")
 
     @property
     def cors_origin_list(self) -> List[str]:

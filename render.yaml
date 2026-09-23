@@ -1,0 +1,44 @@
+services:
+  # LegalEase Backend Database (PostgreSQL)
+  - type: pserv
+    name: legalease-db
+    database:
+      name: legalease_db
+      user: legalease_user
+      plan: free
+
+  # LegalEase Backend API (FastAPI)
+  - type: web
+    name: legalease-backend
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: Dockerfile
+    rootDirectory: backend
+    envVars:
+      - key: APP_NAME
+        value: LegalEase
+      - key: ENVIRONMENT
+        value: production
+      - key: PORT
+        value: 8000
+      - key: DEBUG
+        value: "false"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: CORS_ORIGINS
+        value: "https://legalease-virid-delta.vercel.app,https://legalease-3ufvw645w-mathan0310e.vercel.app,http://localhost:5173"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: legalease-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+    healthCheckPath: /api/health
+    healthCheckTimeout: 10
