@@ -6,12 +6,17 @@ from app.config import settings
 
 DATABASE_URL = settings.DATABASE_URL
 
+# Fix PostgreSQL URI scheme for SQLAlchemy 2.0 (Render provides postgres://)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # Handle SQLite specifics (like check_same_thread and enabling foreign keys)
 connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
+
 
 if DATABASE_URL.startswith("sqlite"):
     @event.listens_for(engine, "connect")

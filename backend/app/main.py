@@ -16,8 +16,12 @@ logger = logging.getLogger("LegalEase")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: create tables and seed demo data
-    logger.info("Initializing database tables...")
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables initialized successfully.")
+    except Exception as e:
+        logger.error(f"Error initializing database tables on startup: {e}")
+
 
     # Initialize demo data
     try:
