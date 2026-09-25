@@ -1,27 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "framework": "vite",
+  "installCommand": "npm install --prefix frontend",
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
     {
-      "src": "frontend/dist/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/frontend/dist/assets/$1"
-    },
-    {
-      "src": "/favicon.svg",
-      "dest": "/frontend/dist/favicon.svg"
-    },
-    {
-      "src": "/icons.svg",
-      "dest": "/frontend/dist/icons.svg"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/dist/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
