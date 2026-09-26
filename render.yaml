@@ -1,11 +1,12 @@
+databases:
+  # LegalEase Backend Database (Managed PostgreSQL)
+  - name: legalease-db
+    databaseName: legalease_db
+    user: legalease_user
+    plan: free
+    region: oregon
+
 services:
-  # LegalEase Backend Database (PostgreSQL)
-  - type: pserv
-    name: legalease-db
-    database:
-      name: legalease_db
-      user: legalease_user
-      plan: free
 
   # LegalEase Backend API (FastAPI)
   - type: web
